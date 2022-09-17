@@ -42,7 +42,7 @@ def Tanh(input):
     Classic and appreciated in GANs.
     '''
     tanh = np.tanh(input)
-    dtanh = 1-(input**2)
+    dtanh = 1-(tanh**2)
     
     return tanh, dtanh
     
