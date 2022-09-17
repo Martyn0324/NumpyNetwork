@@ -44,7 +44,7 @@ b_out = np.zeros(OUTPUT)
 
 # Let's begin the training loop. You can create a function with this, but I think it's more didactical to make it like this
 
-for epoch in EPOCHS:
+for epoch in range(EPOCHS):
     input = next(DataLoader(image, BATCH_SIZE)) # This is the actual input
     
     # And this is where the fun begins.
@@ -163,56 +163,54 @@ kernel = np.random.normal(0, 0.01, (3,3))
 # Each kernel value is a weight...we already know how to perform Stochastic Gradient Descent with a single value, and we can easily grab one
 # of those weights from the kernel, so...
 
-def Conv2D(input, kernel, padding=0, strides=1, out_channels=1, activation=None):
-    for i in range(out_channels):
-        kernel = np.flipud(np.fliplr(kernel)) # Cross-correlation
+def Conv2D(data, kernel, padding=0, strides=1, out_channels=1, activation=None):
+    input = next(DataLoader(data, BATCH_SIZE))
+    kernel = np.flipud(np.fliplr(kernel)) # Cross-correlation
+    xi, yi = input.shape[1], input.shape[2]
+    xk, yk = kernel.shape[0], kernel.shape[1]
+    
+    xout = (xi - xk + 2*padding)/strides + 1.0
+    xout = int(xout)
 
-        xi, yi = input.shape[0], input.shape[1]
-        xk, yk = kernel.shape[0], kernel.shape[1]
+    yout = (yi - yk + 2*padding)/strides + 1.0
+    yout = int(yout)
 
-        xout = (xi - xk + 2*padding)/strides + 1.0
-        xout = int(xout)
+    output = np.zeros((xout, yout))
 
-        yout = (yi - yk + 2*padding)/strides + 1.0
-        yout = int(yout)
+    # Remember: A TransposedConv is simply a very padded input + normal Conv
 
-        output = np.zeros((xout, yout))
+    if padding != 0:
+        for sample in range(input.shape[0]):
+            input[sample] = np.pad(input[sample], (padding, padding))
+            xi, yi = input.shape[1], input.shape[2]
 
-        # Remember: A TransposedConv is simply a very padded input + normal Conv
+    for y in range(yi):
+        if y > yi-yk:
+            break
+        if y % strides == 0:
+            for x in range(xi):
+                if x > xi-xk:
+                    break
 
-        if padding != 0:
-            input = np.pad(input, (padding, padding))
-            xi, yi = input.shape[0], input.shape[1]
-        
-        for y in range(yi):
-            if y > yi-yk:
-                break
-            if y % strides == 0:
-                for x in range(xi):
-                    if x > xi-xk:
-                        break
-                    
-                    try:
-                        if x % strides == 0:
-                            output[x,y] = (kernel * input[x:x+xk, y:y+yk]).sum()
-                        
-                        if activation:
-                            output[x,y] = activation(output[x,y])
-                    
-                    except:
-                        break
-        
-        feature_map = np.stack(output, -1)
+                try:
+                    if x % strides == 0:
+                        output[x,y] = (kernel * input[x:x+xk, y:y+yk]).sum()
 
-    return feature_map
+                    if activation:
+                        output[x,y], dact = activation(output[x,y])
 
-# Backprop?
+                except:
+                    break
 
-output = Conv2D(image, kernel, activation=ReLU())
+    return output, dact # Remember to repeat this conv over each channel of your input
+
+# Backprop
+
+output, dact = Conv2D(image, kernel, padding=1, activation=ReLU())
 
 # Need some help with the calculations? Here, take this:
 
-def conv2out(input, kernel, stride, padding):
+def conv2out(input_shape, kernel, stride, padding):
     x = 2*padding
     y = 1*(kernel-1)
     z = (input + x - y - 1)/stride
@@ -227,9 +225,7 @@ def Conv2Dbackward():
         for x in range(kernel.shape[0]):
             weight = kernel[x,y]
 
-            K = dcost * dReLU(kernel[x,y])
+            K = dcost * dact
             dwout = np.matmul(K.T, image)
 
             weight = weight - lr * dwout.T
-
-
