@@ -19,3 +19,9 @@ https://medium.com/@neuralthreads/categorical-cross-entropy-loss-the-most-import
 https://medium.com/analytics-vidhya/2d-convolution-using-python-numpy-43442ff5f381
 
 https://towardsdatascience.com/types-of-convolutions-in-deep-learning-717013397f4d
+
+https://automata88.medium.com/how-to-implement-the-softmax-derivative-independently-from-any-loss-function-ae6d44363a9d
+
+https://en.wikipedia.org/wiki/Softmax_function
+
+https://medium.com/arteos-ai/the-differences-between-sigmoid-and-softmax-activation-function-12adee8cf322
