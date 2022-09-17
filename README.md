@@ -27,3 +27,5 @@ https://en.wikipedia.org/wiki/Softmax_function
 https://medium.com/arteos-ai/the-differences-between-sigmoid-and-softmax-activation-function-12adee8cf322
 
 https://github.com/CaptainE/RNN-LSTM-in-numpy/blob/master/RNN_LSTM_from_scratch.ipynb
+
+https://towardsdatascience.com/backpropagation-in-a-convolutional-layer-24c8d64d8509
