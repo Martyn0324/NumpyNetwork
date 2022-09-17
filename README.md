@@ -25,3 +25,5 @@ https://automata88.medium.com/how-to-implement-the-softmax-derivative-independen
 https://en.wikipedia.org/wiki/Softmax_function
 
 https://medium.com/arteos-ai/the-differences-between-sigmoid-and-softmax-activation-function-12adee8cf322
+
+https://github.com/CaptainE/RNN-LSTM-in-numpy/blob/master/RNN_LSTM_from_scratch.ipynb
