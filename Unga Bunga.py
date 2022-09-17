@@ -1,6 +1,6 @@
 import numpy as np
 from PIL import Image
-from activations.py import ReLU, tanh
+from activations.py import ReLU, Tanh
 from losses.py import mean_squared_error
 
 PATH = PATH
@@ -25,6 +25,7 @@ def DataLoader(data, batch_size):
 
 # With Linear(Dense) layers, we have to flatten the data, in order to properly make its operations(aka: matrix multiplication)
 INPUT = BATCH_SIZE * image.shape[1] * image.shape[2] * image.shape[3] # Since we're using an image, INPUT = BATCH x HEIGHT x WIDTH x CHANNELS
+# If you get IndexError: tuple index out of range, then your input isn't in the shape (N_SAMPLES, HEIGHT, WIDTH, CHANNELS). I suggest preprocessing it.
 
 # Generating the weights and bias. The weights will be multiplying the layer's input, and this multiplication will be summed to the bias. The bias can be deleted
 # in some cases, sticking to the weights only.
@@ -46,7 +47,7 @@ b_out = np.zeros(OUTPUT)
 
 for epoch in range(EPOCHS):
     input = next(DataLoader(image, BATCH_SIZE)) # This is the actual input
-    input = input.flatten()
+    input = input.flatten() # Remember that when we're dealing with Linear layers we have to flatten our data.
     
     # And this is where the fun begins.
     # Remember: the output of a Linear Layer is out = (input * weights) + bias.
@@ -61,7 +62,7 @@ for epoch in range(EPOCHS):
     l3_out, dact3 = ReLU(l3)
     
     out = np.matmul(l3_out, w_out) + b_out
-    output, dactout = tanh(out) # Tanh is a good function to get values between -1 and 1, a normalized image.
+    output, dactout = Tanh(out) # Tanh is a good function to get values between -1 and 1, a normalized image.
     
     # The loss function and its derivative.
     # My idea here is to simply decompose and then recompose my image, so my labels are my inputs. Maybe this could get me to a SuperResolution Model...
@@ -153,8 +154,20 @@ for epoch in range(EPOCHS):
     
     w1 = w1 - LR * dw1.T
     b1 = b1 - LR * db1
-    
-    
+
+    if epoch+1 % 100 == 0:
+        print(f"Epoch: {epoch}\nLoss: {loss}")
+        
+        
+        
+# Since we're working with an image, let's see the result
+
+output = np.reshape(output, (BATCH_SIZE, 100, 100, 3))
+print(output[0])
+output[0] = (output[0] + 1.0)*127.5
+output = Image.fromarray(output[0].astype(np.uint8))
+print(output.show())
+
 
     
 # Simply sticking to the linear layer is too meh. Any mediocre tutorial does this. How about some Conv2D?
