@@ -46,6 +46,7 @@ b_out = np.zeros(OUTPUT)
 
 for epoch in range(EPOCHS):
     input = next(DataLoader(image, BATCH_SIZE)) # This is the actual input
+    input = input.flatten()
     
     # And this is where the fun begins.
     # Remember: the output of a Linear Layer is out = (input * weights) + bias.
