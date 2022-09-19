@@ -7,7 +7,7 @@ Need a code to understand the theory behind Neural Networks? Come, I'll help you
 
 ![champion-sona-mutemix-01](https://user-images.githubusercontent.com/28028007/191060473-b590b832-d85d-46a3-a883-f8d80da73f94.jpg)
 
-### Output over 100 epochs
+### Output over 100 epochs(100x100 image)
 
 https://user-images.githubusercontent.com/28028007/191060636-f6512369-b819-4f38-bc7c-8f3d03515332.mp4
 
