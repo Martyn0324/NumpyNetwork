@@ -38,7 +38,7 @@ https://user-images.githubusercontent.com/28028007/191061899-29125858-938f-4bb7-
 
 https://user-images.githubusercontent.com/28028007/191061912-78decca4-fe90-48ba-b13b-f748579f8a95.mp4
 
-
+*FUN FACT: Using a simple random gaussian noise with center 0 and std = 0.05 returned a similar output for both cases, but with audio in the left stereo only*
 
 # References
 
